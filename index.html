@@ -3,30 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aspirant Hub — choose your platform</title>
-<meta name="description" content="One doorway to every exam platform: NEET Compass and JEE Workbench.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+<title>Tekurious — Aspirant Hub</title>
+<meta name="description" content="Tekurious Aspirant Hub: one doorway to every exam platform — NEET Compass and JEE Workbench.">
+<link rel="icon" type="image/svg+xml" href="tekurious.svg">
 <style>
   :root {
-    --bg: #0a0e1a;
-    --panel: rgba(255, 255, 255, .04);
-    --border: rgba(255, 255, 255, .09);
-    --text: #e2e8f0;
-    --muted: #8b98b5;
+    --navy: #142B3F;
+    --navy-deep: #0C1A2A;
+    --green: #4CAF50;
+    --green-soft: #7BD389;
+    --panel: rgba(255, 255, 255, .045);
+    --border: rgba(255, 255, 255, .10);
+    --text: #e6eef5;
+    --muted: #93a5b8;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
     background:
-      radial-gradient(1200px 600px at 80% -10%, rgba(34, 211, 238, .07), transparent 60%),
-      radial-gradient(1000px 500px at 10% 110%, rgba(167, 139, 250, .06), transparent 60%),
-      var(--bg);
+      radial-gradient(1100px 550px at 85% -10%, rgba(76, 175, 80, .10), transparent 60%),
+      radial-gradient(900px 500px at 5% 110%, rgba(76, 175, 80, .07), transparent 60%),
+      var(--navy-deep);
     color: var(--text);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
   }
-  header { text-align: center; padding: 72px 20px 24px; }
+  header { text-align: center; padding: 60px 20px 20px; }
+  .logo {
+    width: 74px; height: 74px;
+    margin-bottom: 18px;
+    filter: drop-shadow(0 6px 18px rgba(76, 175, 80, .25));
+  }
+  .brand {
+    font-size: .95rem;
+    font-weight: 700;
+    letter-spacing: .34em;
+    text-transform: uppercase;
+    color: var(--green-soft);
+  }
   .kicker {
     display: inline-block;
     font-size: .72rem;
@@ -36,7 +51,7 @@
     border: 1px solid var(--border);
     border-radius: 999px;
     padding: 7px 16px;
-    margin-bottom: 22px;
+    margin: 14px 0 20px;
   }
   h1 {
     font-size: clamp(2rem, 5vw, 3.2rem);
@@ -44,7 +59,7 @@
     letter-spacing: -.02em;
   }
   h1 .grad {
-    background: linear-gradient(90deg, #22d3ee, #a78bfa);
+    background: linear-gradient(90deg, var(--green), var(--green-soft));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -58,7 +73,7 @@
     gap: 28px;
     max-width: 880px;
     width: 100%;
-    margin: 48px auto;
+    margin: 44px auto;
     padding: 0 24px;
     align-items: stretch;
   }
@@ -125,11 +140,17 @@
   .enter .arrow { transition: transform .18s ease; display: inline-block; }
 
   footer {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
     color: var(--muted);
     font-size: .82rem;
     padding: 26px 20px 34px;
+    text-align: center;
   }
+  footer .logo-sm { width: 26px; height: 26px; opacity: .9; }
+  footer b { color: var(--text); font-weight: 600; }
   .empty {
     grid-column: 1 / -1;
     text-align: center;
@@ -140,6 +161,8 @@
 </head>
 <body>
 <header>
+  <img class="logo" src="tekurious.svg" alt="Tekurious logo">
+  <div class="brand">Tekurious</div>
   <span class="kicker">Aspirant Hub</span>
   <h1>Choose your <span class="grad">platform</span></h1>
   <p class="tagline" id="tagline"></p>
@@ -147,13 +170,15 @@
 
 <main class="grid" id="grid"></main>
 
-<footer id="footer"></footer>
+<footer>
+  <img class="logo-sm" src="tekurious.svg" alt="">
+  <span><b>Tekurious</b> · <span id="footer"></span></span>
+</footer>
 
 <script>
   fetch("platforms.json")
     .then(r => r.json())
     .then(cfg => {
-      document.title = cfg.site.title + " — choose your platform";
       document.getElementById("tagline").textContent = cfg.site.tagline;
       document.getElementById("footer").textContent = cfg.site.footer;
       const grid = document.getElementById("grid");

@@ -1,8 +1,8 @@
 {
   "site": {
-    "title": "Aspirant Hub",
-    "tagline": "One doorway to every exam platform",
-    "footer": "Built for aspirants · platforms run live from the mentor's server"
+    "title": "Tekurious — Aspirant Hub",
+    "tagline": "One doorway to every exam platform, by Tekurious",
+    "footer": "Aspirant Hub · platforms run live on Tekurious servers"
   },
   "platforms": [
     {

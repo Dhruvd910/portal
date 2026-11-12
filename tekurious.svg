@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Tekurious mark: split ring + TG monogram -->
+  <g fill="#4CAF50">
+    <!-- green arc: top-right -->
+    <path d="M276.2 24.9 A232 232 0 0 1 364.9 460.8 L330.2 395.5 A158 158 0 0 0 269.8 98.6 Z"/>
+    <!-- green arc: bottom-left -->
+    <path d="M165.4 469.6 A232 232 0 0 1 24.1 247.9 L98.1 250.5 A158 158 0 0 0 194.3 401.4 Z"/>
+    <!-- green square -->
+    <rect x="302" y="146" width="94" height="56"/>
+  </g>
+  <g fill="#142B3F">
+    <!-- navy arc: bottom-right -->
+    <path d="M346.6 469.6 A232 232 0 0 1 188.2 477.9 L209.8 407.1 A158 158 0 0 0 317.7 401.4 Z"/>
+    <!-- navy arc: left -->
+    <path d="M24.6 239.8 A232 232 0 0 1 235.8 24.9 L242.2 98.6 A158 158 0 0 0 98.4 245.0 Z"/>
+    <!-- T -->
+    <rect x="116" y="166" width="174" height="50"/>
+    <rect x="174" y="166" width="52" height="186"/>
+    <!-- G with slot -->
+    <path fill-rule="evenodd" d="M248 226 H408 V354 H248 Z M300 272 H408 V306 H300 Z"/>
+  </g>
+</svg>
