@@ -6,6 +6,9 @@
 <title>Tekurious — Aspirant Hub</title>
 <meta name="description" content="Tekurious Aspirant Hub: one doorway to every exam platform — NEET Compass and JEE Workbench.">
 <link rel="icon" type="image/svg+xml" href="tekurious.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --navy: #142B3F;
@@ -31,18 +34,39 @@
   }
   header { text-align: center; padding: 60px 20px 20px; }
   .brandlink { text-decoration: none; display: block; }
+  .lockup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
   .logo {
     display: block;
-    width: 84px; height: 84px;
-    margin: 0 auto 16px;
-    padding: 12px;
+    width: 66px; height: 66px;
+    padding: 9px;
     box-sizing: border-box;
     background: #F3F7F4;
-    border-radius: 24px;
+    border-radius: 18px;
     box-shadow: 0 8px 22px rgba(0, 0, 0, .35), 0 0 0 1px rgba(255, 255, 255, .08);
     transition: transform .18s ease;
   }
   .brandlink:hover .logo { transform: scale(1.06); }
+  .wordmark {
+    font-family: "Quicksand", "Segoe UI", sans-serif;
+    font-weight: 700;
+    font-size: 2.3rem;
+    letter-spacing: .01em;
+    color: var(--green);
+    line-height: 1;
+  }
+  .wordmark-sm {
+    font-family: "Quicksand", "Segoe UI", sans-serif;
+    font-weight: 700;
+    font-size: 1.02rem;
+    color: var(--green-soft);
+    text-decoration: none;
+  }
+  a.wordmark-sm:hover { color: var(--green); }
   .brand {
     display: block;
     font-size: .95rem;
@@ -61,7 +85,7 @@
     border: 1px solid var(--border);
     border-radius: 999px;
     padding: 7px 16px;
-    margin: 14px 0 20px;
+    margin: 18px 0 20px;
   }
   h1 {
     font-size: clamp(2rem, 5vw, 3.2rem);
@@ -166,9 +190,8 @@
     background: #F3F7F4;
     border-radius: 8px;
   }
+  footer { gap: 10px; }
   footer b { color: var(--text); font-weight: 600; }
-  .footerbrand { color: inherit; text-decoration: none; }
-  .footerbrand:hover { color: var(--green-soft); }
   .empty {
     grid-column: 1 / -1;
     text-align: center;
@@ -180,8 +203,10 @@
 <body>
 <header>
   <a class="brandlink" href="https://tekurious.in" target="_blank" rel="noopener" title="tekurious.in">
-    <img class="logo" src="tekurious.svg" alt="Tekurious logo">
-    <div class="brand">Tekurious</div>
+    <span class="lockup">
+      <img class="logo" src="tekurious.svg" alt="Tekurious logo">
+      <span class="wordmark">Tekurious</span>
+    </span>
   </a>
   <span class="kicker">Aspirant Hub</span>
   <h1>Choose your <span class="grad">platform</span></h1>
@@ -192,7 +217,8 @@
 
 <footer>
   <img class="logo-sm" src="tekurious.svg" alt="">
-  <span><a class="footerbrand" href="https://tekurious.in" target="_blank" rel="noopener"><b>Tekurious</b></a> · <span id="footer"></span></span>
+  <a class="wordmark-sm" href="https://tekurious.in" target="_blank" rel="noopener">Tekurious</a>
+  <span>· <span id="footer"></span></span>
 </footer>
 
 <script>
