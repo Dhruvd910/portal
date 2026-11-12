@@ -1,0 +1,39 @@
+{
+  "site": {
+    "title": "Aspirant Hub",
+    "tagline": "One doorway to every exam platform",
+    "footer": "Built for aspirants · platforms run live from the mentor's server"
+  },
+  "platforms": [
+    {
+      "id": "neet",
+      "name": "NEET Compass",
+      "emoji": "🩺",
+      "field": "Medical",
+      "tagline": "Guidance and practice for NEET UG",
+      "bullets": [
+        "Previous-year questions with official keys",
+        "Personalised practice and analytics",
+        "College finder with eligibility rules"
+      ],
+      "accent": "#34d399",
+      "accent2": "#10b981",
+      "url": "https://short-soundtrack-multimedia-figured.trycloudflare.com/"
+    },
+    {
+      "id": "jee",
+      "name": "JEE Workbench",
+      "emoji": "⚡",
+      "field": "Engineering",
+      "tagline": "Practice and counselling for JEE Main + Advanced",
+      "bullets": [
+        "Real NTA / IIT papers with official keys",
+        "Mocks that never repeat a question",
+        "JoSAA cutoffs, rank predictor, choice list"
+      ],
+      "accent": "#22d3ee",
+      "accent2": "#a78bfa",
+      "url": "https://tribunal-panel-connecticut-materials.trycloudflare.com/"
+    }
+  ]
+}

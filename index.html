@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aspirant Hub — choose your platform</title>
+<meta name="description" content="One doorway to every exam platform: NEET Compass and JEE Workbench.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --panel: rgba(255, 255, 255, .04);
+    --border: rgba(255, 255, 255, .09);
+    --text: #e2e8f0;
+    --muted: #8b98b5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(34, 211, 238, .07), transparent 60%),
+      radial-gradient(1000px 500px at 10% 110%, rgba(167, 139, 250, .06), transparent 60%),
+      var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header { text-align: center; padding: 72px 20px 24px; }
+  .kicker {
+    display: inline-block;
+    font-size: .72rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 7px 16px;
+    margin-bottom: 22px;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -.02em;
+  }
+  h1 .grad {
+    background: linear-gradient(90deg, #22d3ee, #a78bfa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .tagline { color: var(--muted); margin-top: 12px; font-size: 1.05rem; }
+
+  .grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 28px;
+    max-width: 880px;
+    width: 100%;
+    margin: 48px auto;
+    padding: 0 24px;
+    align-items: stretch;
+  }
+  a.card {
+    text-decoration: none;
+    color: inherit;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 34px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+  a.card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--c1), var(--c2));
+  }
+  a.card:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--c1) 45%, transparent);
+    box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--c1) 35%, transparent);
+  }
+  .emoji { font-size: 2.4rem; }
+  .field {
+    font-size: .7rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--c1) 80%, white);
+    font-weight: 700;
+  }
+  .card h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -.01em; }
+  .card .tagline { margin-top: 0; font-size: .95rem; }
+  .card ul { list-style: none; margin-top: 6px; display: grid; gap: 8px; }
+  .card li {
+    color: var(--muted);
+    font-size: .92rem;
+    padding-left: 22px;
+    position: relative;
+  }
+  .card li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--c1);
+  }
+  .enter {
+    margin-top: auto;
+    padding-top: 18px;
+    font-weight: 700;
+    font-size: .95rem;
+    color: var(--c1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  a.card:hover .enter .arrow { transform: translateX(4px); }
+  .enter .arrow { transition: transform .18s ease; display: inline-block; }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: .82rem;
+    padding: 26px 20px 34px;
+  }
+  .empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--muted);
+    padding: 60px 0;
+  }
+</style>
+</head>
+<body>
+<header>
+  <span class="kicker">Aspirant Hub</span>
+  <h1>Choose your <span class="grad">platform</span></h1>
+  <p class="tagline" id="tagline"></p>
+</header>
+
+<main class="grid" id="grid"></main>
+
+<footer id="footer"></footer>
+
+<script>
+  fetch("platforms.json")
+    .then(r => r.json())
+    .then(cfg => {
+      document.title = cfg.site.title + " — choose your platform";
+      document.getElementById("tagline").textContent = cfg.site.tagline;
+      document.getElementById("footer").textContent = cfg.site.footer;
+      const grid = document.getElementById("grid");
+      if (!cfg.platforms.length) {
+        grid.innerHTML = '<p class="empty">No platforms configured yet.</p>';
+        return;
+      }
+      for (const p of cfg.platforms) {
+        const a = document.createElement("a");
+        a.className = "card";
+        a.href = p.url;
+        a.style.setProperty("--c1", p.accent);
+        a.style.setProperty("--c2", p.accent2);
+        a.innerHTML = `
+          <span class="emoji">${p.emoji}</span>
+          <span class="field">${p.field}</span>
+          <h2>${p.name}</h2>
+          <p class="tagline">${p.tagline}</p>
+          <ul>${p.bullets.map(b => `<li>${b}</li>`).join("")}</ul>
+          <span class="enter">Open platform <span class="arrow">→</span></span>`;
+        grid.appendChild(a);
+      }
+    })
+    .catch(() => {
+      document.getElementById("grid").innerHTML =
+        '<p class="empty">Could not load platforms.json</p>';
+    });
+</script>
+</body>
+</html>
