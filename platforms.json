@@ -2,7 +2,7 @@
   "site": {
     "title": "Tekurious — Aspirant Hub",
     "tagline": "One doorway to every exam platform, by Tekurious",
-    "footer": "Aspirant Hub · platforms run live on Tekurious servers"
+    "footer": "Aspirant Hub - platforms run live on Tekurious servers"
   },
   "platforms": [
     {
@@ -10,9 +10,10 @@
       "name": "NEET Compass",
       "emoji": "🩺",
       "field": "Medical",
-      "tagline": "Guidance and practice for NEET UG",
+      "watermark": "cross",
+      "tagline": "Guidance and practice for NEET UG!",
       "bullets": [
-        "Previous-year questions with official keys",
+        "Previous year questions with official keys",
         "Personalised practice and analytics",
         "College finder with eligibility rules"
       ],
@@ -25,14 +26,15 @@
       "name": "JEE Workbench",
       "emoji": "⚡",
       "field": "Engineering",
-      "tagline": "Practice and counselling for JEE Main + Advanced",
+      "watermark": "gear",
+      "tagline": "Practice and counselling for JEE Main + Advanced!",
       "bullets": [
         "Real NTA / IIT papers with official keys",
-        "Mocks that never repeat a question",
-        "JoSAA cutoffs, rank predictor, choice list"
+        "Mock tests that never repeat a question",
+        "JoSAA cutoffs, rank prediction, choice list"
       ],
-      "accent": "#22d3ee",
-      "accent2": "#a78bfa",
+      "accent": "#4f8df9",
+      "accent2": "#2563eb",
       "url": "https://tribunal-panel-connecticut-materials.trycloudflare.com/"
     }
   ]
