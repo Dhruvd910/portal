@@ -129,17 +129,42 @@
   }
 
   /* ---------- cards ---------- */
+  /* circular carousel: the cards sit on a turning ring; the front one is full size, its neighbours
+     turn away on either side, the rest wait behind. It loops forever (arrows, dots, swipe, keys, or tap a side card). */
+  .carousel { flex: 1; position: relative; width: 100%; max-width: 1180px; margin: 36px auto; padding: 0 16px; overflow: hidden; }
   .grid {
-    flex: 1;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 32px;
-    max-width: 1020px;  /* two cards per row, so four cards make a 2 x 2 grid */
-    width: 100%;
-    margin: 44px auto;
-    padding: 0 24px 20px;
-    align-items: stretch;
+    display: grid;  /* every card in the same cell, so the stage is as tall as the tallest card */
+    place-items: center;
+    perspective: 1400px;
+    padding: 16px 0 30px;
   }
+  .grid a.card {
+    grid-area: 1 / 1;
+    width: min(440px, 84vw);
+    align-self: stretch;
+    background-color: #0d1824;  /* solid under the glass, so cards behind don't show through */
+    transition: transform .6s cubic-bezier(.2, .8, .2, 1), opacity .6s ease, filter .6s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+  .grid a.card:not(.front) { cursor: pointer; filter: saturate(.75) brightness(.8); }  .navbtn {
+    position: absolute; top: calc(50% - 40px); z-index: 50;
+    width: 46px; height: 46px; border-radius: 50%;
+    display: grid; place-items: center;
+    border: 1px solid var(--border); background: rgba(255, 255, 255, .06); color: #e8eefc;
+    font-size: 1.5rem; line-height: 1; cursor: pointer;
+    transition: background .18s ease, opacity .18s ease;
+  }
+  .navbtn:hover:not(:disabled) { background: rgba(255, 255, 255, .14); }
+  .navbtn:disabled { opacity: .25; cursor: default; }
+  .navbtn.prev { left: 22px; } .navbtn.next { right: 22px; }
+  .pager { display: flex; justify-content: center; gap: 10px; }
+  .pager button {
+    width: 10px; height: 10px; padding: 0; border: 0; border-radius: 999px; cursor: pointer;
+    background: rgba(255, 255, 255, .25); transition: width .2s ease, background .2s ease;
+  }
+  .pager button[aria-current="true"] { width: 28px; background: linear-gradient(90deg, #22d3ee, #4ade80); }
+  :focus-visible { outline: 2px solid #22d3ee; outline-offset: 3px; }
+  @media (max-width: 760px) { .navbtn { display: none; } }  /* swipe on phones */
+  @media (prefers-reduced-motion: reduce) { .grid a.card { transition: none; } }
   a.card {
     text-decoration: none;
     color: inherit;
@@ -298,7 +323,12 @@
   <div class="rule"></div>
 </header>
 
-<main class="grid" id="grid"></main>
+<main class="carousel" aria-roledescription="carousel" aria-label="Platforms">
+  <button class="navbtn prev" id="prev" type="button" aria-label="Previous platforms">‹</button>
+  <div class="grid" id="grid"></div>
+  <button class="navbtn next" id="next" type="button" aria-label="Next platforms">›</button>
+  <div class="pager" id="pager"></div>
+</main>
 
 <footer>
   <span class="footerpill">
@@ -324,7 +354,55 @@
       '<circle cx="50" cy="12" r="4" fill="currentColor"/><circle cx="37" cy="50" r="5" fill="currentColor"/><circle cx="63" cy="50" r="5" fill="currentColor"/></svg>'
   };
 
-  fetch("platforms.json", { cache: "no-cache" })  // always check for a newer card list (GitHub Pages lets browsers cache 10 min)
+  // Circular carousel: each card's place on the ring is its distance d from the front card, wrapped so the
+  // ring has no ends (with 4 cards: d = -2, -1, 0, 1). Turning the ring just changes which card is in front.
+  function carousel(grid) {
+    const cards = [...grid.children], n = cards.length, pager = document.getElementById("pager");
+    let front = 0;
+    function place() {
+      const narrow = innerWidth < 760;
+      cards.forEach((c, i) => {
+        const d = ((i - front + n + Math.floor(n / 2)) % n) - Math.floor(n / 2), a = Math.abs(d);
+        const x = d * (narrow ? 78 : 70), behind = a >= 2;
+        c.style.transform = `translateX(${behind ? 0 : x}%) translateZ(${-a * 160}px) rotateY(${-d * (narrow ? 0 : 28)}deg) scale(${behind ? .6 : 1 - a * .1})`;
+        c.style.opacity = behind ? 0 : a ? .75 : 1;
+        c.style.zIndex = 10 - a;
+        c.style.pointerEvents = behind ? "none" : "";
+        c.classList.toggle("front", d === 0);
+        c.tabIndex = d === 0 ? 0 : -1;
+        c.setAttribute("aria-hidden", d !== 0);
+      });
+      [...pager.children].forEach((b, i) => b.setAttribute("aria-current", i === front));
+    }
+    const turn = (k) => { front = (front + k + n) % n; place(); };
+    pager.innerHTML = "";
+    cards.forEach((c, i) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.setAttribute("aria-label", "Show " + c.querySelector("h2").textContent);
+      b.onclick = () => { front = i; place(); };
+      pager.appendChild(b);
+      // A side card turns the ring to itself instead of opening; only the front card opens its platform.
+      c.addEventListener("click", (e) => { if (i !== front) { e.preventDefault(); front = i; place(); } });
+    });
+    document.getElementById("prev").onclick = () => turn(-1);
+    document.getElementById("next").onclick = () => turn(1);
+    grid.parentElement.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") turn(-1); else if (e.key === "ArrowRight") turn(1); else return;
+      e.preventDefault(); cards[front].focus({ preventScroll: true });
+    });
+    let x0 = null, swiped = false;  // swipe: a sideways drag of 40px or more turns the ring
+    grid.addEventListener("pointerdown", (e) => { x0 = e.clientX; swiped = false; });
+    grid.addEventListener("pointerup", (e) => {
+      if (x0 !== null && Math.abs(e.clientX - x0) > 40) { swiped = true; turn(e.clientX < x0 ? 1 : -1); }
+      x0 = null;
+    });
+    grid.addEventListener("click", (e) => { if (swiped) { e.preventDefault(); swiped = false; } }, true);
+    addEventListener("resize", place);
+    pager.hidden = n < 2;
+    place();
+  }
+
+  fetch("platforms.json",{ cache: "no-cache" })  // always check for a newer card list (GitHub Pages lets browsers cache 10 min)
     .then(r => r.json())
     .then(cfg => {
       document.getElementById("footer").textContent = cfg.site.footer;
@@ -352,6 +430,7 @@
           <span class="btn">Open platform <span class="arrow">→</span></span>`;
         grid.appendChild(a);
       }
+      carousel(grid);
     })
     .catch(() => {
       document.getElementById("grid").innerHTML =
