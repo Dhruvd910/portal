@@ -296,6 +296,28 @@
   .sep { color: var(--green); }
   .empty { grid-column: 1 / -1; text-align: center; color: var(--muted); padding: 60px 0; }
 
+  /* Desktop: header, carousel and footer fit in one screen at 100% zoom, so the page never scrolls.
+     Spacing and type scale with the window height (vh), down to laptop screens ~600px tall. */
+  @media (min-width: 761px) {
+    body { height: 100vh; min-height: 600px; }  /* below 600px tall it scrolls rather than cutting cards off */
+    header { padding: clamp(12px, 3.2vh, 56px) 20px 0; }
+    .logo { width: clamp(44px, 6vh, 68px); height: clamp(44px, 6vh, 68px); padding: clamp(6px, .8vh, 9px); border-radius: 14px; }
+    .brand { margin: clamp(6px, 1.2vh, 14px) 0 2px; }
+    .kicker { margin: clamp(4px, .8vh, 10px) 0 clamp(6px, 1.6vh, 22px); padding: 6px 16px; }
+    h1 { font-size: clamp(2rem, min(6vw, 6.4vh), 4rem); line-height: 1.1; }
+    .tagline { margin-top: clamp(4px, 1vh, 14px); font-size: clamp(.95rem, 1.8vh, 1.1rem); }
+    .rule { margin-top: clamp(8px, 1.6vh, 20px); }
+    .carousel { flex: 1; min-height: 0; margin: clamp(6px, 1.6vh, 30px) auto 0; display: flex; flex-direction: column; justify-content: center; }
+    .grid { padding: clamp(6px, 1.2vh, 16px) 0 clamp(10px, 2vh, 26px); }
+    a.card { gap: clamp(6px, 1.1vh, 14px); padding: clamp(16px, 2.6vh, 30px) 28px clamp(16px, 2.4vh, 28px); }
+    .appicon { width: clamp(42px, 5.6vh, 58px); height: clamp(42px, 5.6vh, 58px); font-size: clamp(1.3rem, 2.8vh, 1.75rem); }
+    .card h2 { font-size: clamp(1.4rem, 3.2vh, 1.85rem); }
+    .card hr { margin: clamp(4px, 1vh, 14px) 0 2px; }
+    .card ul { gap: clamp(6px, 1.2vh, 13px); padding: 2px 0 clamp(4px, .8vh, 8px); }
+    .btn { padding: clamp(10px, 1.4vh, 14px) 20px; }
+    footer { padding: 6px 20px clamp(10px, 2.2vh, 34px); }
+  }
+
   @media (max-width: 640px) {
     .dots-1, .dots-3 { display: none; }
     .bg-mono { width: 420px; height: 420px; opacity: .08; }
