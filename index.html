@@ -321,7 +321,7 @@
       '<path d="M20 50 q8 -22 16 -6 t16 -8 t16 4" /><path d="M66 26 h14"/></svg>'
   };
 
-  fetch("platforms.json")
+  fetch("platforms.json", { cache: "no-cache" })  // always check for a newer card list (GitHub Pages lets browsers cache 10 min)
     .then(r => r.json())
     .then(cfg => {
       document.getElementById("footer").textContent = cfg.site.footer;
