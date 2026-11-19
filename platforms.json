@@ -52,6 +52,22 @@
       "accent": "#f59e0b",
       "accent2": "#ea580c",
       "url": "https://13-232-170-34.sslip.io/"
+    },
+    {
+      "id": "liza",
+      "name": "LIZA",
+      "emoji": "🤖",
+      "field": "AI Tutor",
+      "watermark": "bot",
+      "tagline": "A friendly AI tutor to talk and learn with!",
+      "bullets": [
+        "Talk with Liza by voice",
+        "Learn with her, one question at a time",
+        "Play the Kindergarten workbook"
+      ],
+      "accent": "#e879f9",
+      "accent2": "#a855f7",
+      "url": "https://3-108-162-179.sslip.io/"
     }
   ]
 }

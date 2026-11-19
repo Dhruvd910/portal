@@ -132,9 +132,9 @@
   .grid {
     flex: 1;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 32px;
-    max-width: 1120px;  /* room for three cards in one row */
+    max-width: 1020px;  /* two cards per row, so four cards make a 2 x 2 grid */
     width: 100%;
     margin: 44px auto;
     padding: 0 24px 20px;
@@ -318,7 +318,10 @@
       '</g><circle cx="50" cy="50" r="21" fill="none" stroke="currentColor" stroke-width="15"/></svg>',
     board: '<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">' +
       '<rect x="8" y="12" width="84" height="56" rx="5"/><path d="M30 68 L22 94 M70 68 L78 94 M50 4 v8"/>' +
-      '<path d="M20 50 q8 -22 16 -6 t16 -8 t16 4" /><path d="M66 26 h14"/></svg>'
+      '<path d="M20 50 q8 -22 16 -6 t16 -8 t16 4" /><path d="M66 26 h14"/></svg>',
+    bot: '<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">' +
+      '<rect x="16" y="28" width="68" height="52" rx="14"/><path d="M50 28 v-12 M8 50 v12 M92 50 v12 M38 66 h24"/>' +
+      '<circle cx="50" cy="12" r="4" fill="currentColor"/><circle cx="37" cy="50" r="5" fill="currentColor"/><circle cx="63" cy="50" r="5" fill="currentColor"/></svg>'
   };
 
   fetch("platforms.json", { cache: "no-cache" })  // always check for a newer card list (GitHub Pages lets browsers cache 10 min)
