@@ -36,6 +36,22 @@
       "accent": "#4f8df9",
       "accent2": "#2563eb",
       "url": "https://dhruvd910.github.io/JEE/"
+    },
+    {
+      "id": "board",
+      "name": "AI Smart Board",
+      "emoji": "✍️",
+      "field": "Whiteboard",
+      "watermark": "board",
+      "tagline": "Write on the board, and Liza reads it and explains!",
+      "bullets": [
+        "Reads your handwriting and solves it step by step",
+        "Live graphs, geometry lab and 3D models",
+        "Works on phones, tablets and smartboards"
+      ],
+      "accent": "#f59e0b",
+      "accent2": "#ea580c",
+      "url": "https://13-232-170-34.sslip.io/"
     }
   ]
 }
