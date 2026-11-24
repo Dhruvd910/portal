@@ -137,6 +137,7 @@
     place-items: center;
     perspective: 1400px;
     padding: 16px 0 30px;
+    touch-action: pan-y;  /* sideways finger drags reach the swipe code instead of panning the page */
   }
   .grid a.card {
     grid-area: 1 / 1;
@@ -449,7 +450,9 @@
       if (x0 !== null && Math.abs(e.clientX - x0) > 40) { swiped = true; turn(e.clientX < x0 ? 1 : -1); }
       x0 = null;
     });
-    grid.addEventListener("click", (e) => { if (swiped) { e.preventDefault(); swiped = false; } }, true);
+    // the click that ends a swipe must not reach the card: it is a side card by then and would turn the ring back
+    grid.addEventListener("click", (e) => { if (swiped) { e.preventDefault(); e.stopPropagation(); swiped = false; } }, true);
+    grid.addEventListener("dragstart", (e) => e.preventDefault());  // a mouse drag on a card would start a link drag and swallow pointerup
     addEventListener("resize", place);
     pager.hidden = n < 2;
     place();
