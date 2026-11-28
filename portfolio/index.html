@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dhruv Singh — AI / IoT Developer</title>
+<meta name="description" content="Dhruv Singh builds AI robots, voice tutors and exam platforms: LLMs, RAG, computer vision and IoT on Raspberry Pi and ESP32.">
+<meta property="og:title" content="Dhruv Singh — AI / IoT Developer">
+<meta property="og:description" content="AI robots, voice tutors and exam platforms: LLMs, RAG, computer vision and IoT.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314b8a6'/%3E%3Ctext x='32' y='43' font-family='Arial' font-weight='700' font-size='28' text-anchor='middle' fill='%23061016'%3EDS%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f8fa;
+    --bg-2: #ffffff;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --muted: #526077;
+    --accent: #0d9488;
+    --accent-2: #d97706;
+    --accent-soft: rgba(13, 148, 136, .10);
+    --chip: #eef2f6;
+    --shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px rgba(15, 23, 42, .06);
+    --grid: rgba(15, 23, 42, .045);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #070d14;
+      --bg-2: #0b141e;
+      --card: #0e1924;
+      --border: #1c2b3a;
+      --text: #e6edf5;
+      --muted: #93a4b8;
+      --accent: #2dd4bf;
+      --accent-2: #fbbf24;
+      --accent-soft: rgba(45, 212, 191, .10);
+      --chip: #132232;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 12px 32px rgba(0, 0, 0, .35);
+      --grid: rgba(255, 255, 255, .035);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #070d14;
+    --bg-2: #0b141e;
+    --card: #0e1924;
+    --border: #1c2b3a;
+    --text: #e6edf5;
+    --muted: #93a4b8;
+    --accent: #2dd4bf;
+    --accent-2: #fbbf24;
+    --accent-soft: rgba(45, 212, 191, .10);
+    --chip: #132232;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 12px 32px rgba(0, 0, 0, .35);
+    --grid: rgba(255, 255, 255, .035);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+  body {
+    font-family: Inter, ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; }
+  h1, h2, h3 { font-family: "Space Grotesk", Inter, sans-serif; line-height: 1.15; letter-spacing: -.01em; }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  @media (max-width: 560px) { .wrap { padding: 0 16px; } }
+
+  /* ---------- nav ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 16px; }
+  .brand { font-family: "Space Grotesk", sans-serif; font-weight: 700; text-decoration: none; font-size: 18px; display: flex; align-items: center; gap: 10px; }
+  .brand-mark {
+    width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center;
+    background: var(--accent); color: var(--bg); font-size: 13px; font-weight: 700;
+  }
+  .links { display: flex; gap: 4px; align-items: center; }
+  .links a {
+    text-decoration: none; color: var(--muted); font-size: 14px; font-weight: 500;
+    padding: 6px 10px; border-radius: 8px;
+  }
+  .links a:hover { color: var(--text); background: var(--chip); }
+  .icon-btn {
+    width: 36px; height: 36px; border-radius: 9px; border: 1px solid var(--border);
+    background: var(--card); color: var(--text); cursor: pointer; display: grid; place-items: center;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn svg { width: 18px; height: 18px; }
+  @media (max-width: 760px) { .links a.hide-sm { display: none; } }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    padding: 88px 0 72px;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 44px 44px;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .hero::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(600px 320px at 85% 20%, var(--accent-soft), transparent 70%),
+                linear-gradient(to bottom, transparent 70%, var(--bg));
+  }
+  .hero .wrap { position: relative; z-index: 1; display: grid; grid-template-columns: 1.35fr 1fr; gap: 48px; align-items: center; }
+  @media (max-width: 880px) { .hero .wrap { grid-template-columns: 1fr; } .hero { padding: 56px 0 48px; } }
+  .status {
+    display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted);
+    border: 1px solid var(--border); background: var(--card); padding: 5px 12px; border-radius: 999px;
+  }
+  .status i { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 3px rgba(34, 197, 94, .2); }
+  .hero h1 { font-size: clamp(40px, 6.2vw, 64px); margin: 20px 0 14px; }
+  .hero h1 span { color: var(--accent); }
+  .hero .role { font-size: clamp(17px, 2.2vw, 20px); color: var(--muted); max-width: 580px; }
+  .hero .role b { color: var(--text); font-weight: 600; }
+  .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 600; font-size: 15px;
+    padding: 11px 18px; border-radius: 10px; border: 1px solid var(--border); background: var(--card);
+    transition: transform .15s ease, border-color .15s ease;
+  }
+  .btn:hover { transform: translateY(-1px); border-color: var(--accent); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .btn svg { width: 17px; height: 17px; }
+
+  /* terminal card */
+  .term {
+    background: #0a121b; color: #d5e2ee; border-radius: 14px; border: 1px solid #1c2b3a;
+    box-shadow: var(--shadow); overflow: hidden; font-size: 13px;
+  }
+  .term-bar { display: flex; gap: 6px; padding: 11px 14px; border-bottom: 1px solid #1c2b3a; align-items: center; }
+  .term-bar i { width: 10px; height: 10px; border-radius: 50%; background: #334155; }
+  .term-bar i:nth-child(1) { background: #f87171; } .term-bar i:nth-child(2) { background: #fbbf24; } .term-bar i:nth-child(3) { background: #34d399; }
+  .term-bar span { margin-left: 8px; color: #7b8ea3; font-size: 12px; }
+  .term pre { padding: 16px 18px 18px; white-space: pre-wrap; line-height: 1.7; min-height: 248px; }
+  .t-p { color: #2dd4bf; } .t-k { color: #fbbf24; } .t-c { color: #64748b; } .t-s { color: #a5b4fc; }
+  .caret { display: inline-block; width: 8px; height: 15px; background: #2dd4bf; vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ---------- stats ---------- */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-top: -36px; position: relative; z-index: 2; box-shadow: var(--shadow); }
+  .stat { background: var(--card); padding: 22px 20px; }
+  .stat b { font-family: "Space Grotesk", sans-serif; font-size: 30px; display: block; line-height: 1.1; }
+  .stat span { color: var(--muted); font-size: 14px; }
+  @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+
+  /* ---------- sections ---------- */
+  section { padding: 88px 0 0; }
+  .eyebrow { font-family: "JetBrains Mono", monospace; color: var(--accent); font-size: 13px; letter-spacing: .04em; }
+  .sec-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; margin-bottom: 32px; }
+  .sec-head h2 { font-size: clamp(28px, 4vw, 38px); margin-top: 6px; }
+  .sec-head p { color: var(--muted); max-width: 520px; }
+
+  /* about */
+  .about { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; }
+  @media (max-width: 880px) { .about { grid-template-columns: 1fr; } }
+  .about p { color: var(--muted); font-size: 17px; margin-bottom: 14px; }
+  .about p b { color: var(--text); font-weight: 600; }
+  .focus { display: grid; gap: 10px; }
+  .focus > div { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); }
+  .focus svg { width: 20px; height: 20px; flex: none; color: var(--accent); margin-top: 2px; }
+  .focus h3 { font-size: 15px; font-family: Inter, sans-serif; font-weight: 600; }
+  .focus p { font-size: 14px; color: var(--muted); margin: 0; }
+
+  /* timeline */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before { content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: var(--border); }
+  .job { position: relative; padding-bottom: 28px; }
+  .job::before { content: ""; position: absolute; left: -26px; top: 8px; width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 3px solid var(--accent); }
+  .job.past::before { border-color: var(--muted); }
+  .job-card { border: 1px solid var(--border); background: var(--card); border-radius: 14px; padding: 22px 24px; box-shadow: var(--shadow); }
+  .job-top { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .job h3 { font-size: 20px; }
+  .job .org { color: var(--accent); font-weight: 600; font-size: 15px; }
+  .job .when { font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .job ul { margin: 14px 0 0 18px; color: var(--muted); }
+  .job li { margin-bottom: 6px; }
+  .job li::marker { color: var(--accent); }
+
+  /* projects */
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filters button {
+    font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; padding: 7px 14px; border-radius: 999px;
+    border: 1px solid var(--border); background: var(--card); color: var(--muted);
+  }
+  .filters button[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } }
+  .proj {
+    display: flex; flex-direction: column; border: 1px solid var(--border); background: var(--card);
+    border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); transition: transform .18s ease, border-color .18s ease;
+  }
+  .proj:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); }
+  .proj.wide { grid-column: 1 / -1; display: grid; grid-template-columns: 1.1fr 1fr; }
+  @media (max-width: 820px) { .proj.wide { grid-template-columns: 1fr; } }
+  .proj.hidden { display: none; }
+  .visual { position: relative; min-height: 190px; display: grid; place-items: center; overflow: hidden; border-bottom: 1px solid var(--border); }
+  .proj.wide .visual { border-bottom: 0; border-right: 1px solid var(--border); min-height: 300px; }
+  @media (max-width: 820px) { .proj.wide .visual { border-right: 0; border-bottom: 1px solid var(--border); min-height: 210px; } }
+  .visual img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+  .visual .glyph { font-size: 64px; filter: drop-shadow(0 8px 18px rgba(0, 0, 0, .25)); position: relative; }
+  .visual .tag { position: absolute; top: 12px; left: 12px; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: rgba(6, 16, 22, .72); color: #fff; backdrop-filter: blur(4px); z-index: 1; }
+  .v-liza { background: #bbffc8; }
+  .v-liza img { object-fit: contain; animation: bob 4s ease-in-out infinite; }
+  @keyframes bob { 50% { transform: translateY(-6px); } }
+  .v-board { background: #f4f1ea; }
+  .v-board img { object-position: top left; }
+  .v-maya { background: linear-gradient(135deg, #312e81, #7c3aed 60%, #c026d3); }
+  .v-buddy { background: linear-gradient(135deg, #fde68a, #fb923c); }
+  .v-buddy img { width: 128px; height: 128px; position: relative; inset: auto; object-fit: contain; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .2)); }
+  .v-neet { background: linear-gradient(135deg, #064e3b, #10b981); }
+  .v-jee { background: linear-gradient(135deg, #1e3a8a, #4f8df9); }
+  .v-hanuman { background: linear-gradient(135deg, #7c2d12, #f97316 70%, #fbbf24); }
+  .v-3d { background: radial-gradient(circle at 30% 30%, #0e7490, #082f49 70%); }
+  .v-saathi { background: linear-gradient(135deg, #14532d, #65a30d); }
+  .v-tweet { background: linear-gradient(135deg, #0c4a6e, #0284c7); }
+  .wave-bars { position: absolute; bottom: 16px; left: 0; right: 0; display: flex; justify-content: center; gap: 4px; height: 28px; align-items: flex-end; }
+  .wave-bars i { width: 4px; background: rgba(255, 255, 255, .75); border-radius: 2px; animation: wave 1.1s ease-in-out infinite; }
+  @keyframes wave { 0%, 100% { height: 6px; } 50% { height: 26px; } }
+  .body { padding: 22px 22px 20px; display: flex; flex-direction: column; flex: 1; }
+  .body h3 { font-size: 21px; }
+  .body .sub { color: var(--accent); font-size: 14px; font-weight: 600; margin: 2px 0 10px; }
+  .body p { color: var(--muted); font-size: 15px; }
+  .body ul { color: var(--muted); font-size: 14.5px; margin: 10px 0 0 18px; }
+  .body li { margin-bottom: 4px; }
+  .body li::marker { color: var(--accent); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 0; }
+  .chips span { font-family: "JetBrains Mono", monospace; font-size: 12px; padding: 3px 9px; border-radius: 6px; background: var(--chip); color: var(--muted); }
+  .proj-links { display: flex; gap: 14px; margin-top: auto; padding-top: 16px; flex-wrap: wrap; }
+  .proj-links a { font-size: 14px; font-weight: 600; text-decoration: none; color: var(--text); display: inline-flex; gap: 6px; align-items: center; }
+  .proj-links a:hover { color: var(--accent); }
+  .proj-links svg { width: 15px; height: 15px; }
+
+  /* other work */
+  .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 880px) { .mini-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .mini-grid { grid-template-columns: 1fr; } }
+  .mini { border: 1px solid var(--border); background: var(--card); border-radius: 12px; padding: 18px; text-decoration: none; display: block; transition: border-color .15s ease; }
+  .mini:hover { border-color: var(--accent); }
+  .mini h3 { font-family: Inter, sans-serif; font-size: 15.5px; font-weight: 600; display: flex; justify-content: space-between; gap: 8px; }
+  .mini h3 svg { width: 15px; height: 15px; color: var(--muted); flex: none; margin-top: 3px; }
+  .mini p { color: var(--muted); font-size: 14px; margin-top: 6px; }
+
+  /* skills */
+  .skills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 880px) { .skills { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .skills { grid-template-columns: 1fr; } }
+  .skill { border: 1px solid var(--border); background: var(--card); border-radius: 14px; padding: 20px; }
+  .skill h3 { font-size: 16px; display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .skill h3 i { width: 30px; height: 30px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-style: normal; font-size: 15px; }
+  .skill .chips { margin: 0; }
+  .skill .chips span { font-family: Inter, sans-serif; font-size: 13px; color: var(--text); }
+
+  /* education */
+  .edu { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 720px) { .edu { grid-template-columns: 1fr; } }
+  .edu div { border: 1px solid var(--border); background: var(--card); border-radius: 14px; padding: 22px; }
+  .edu h3 { font-size: 18px; }
+  .edu p { color: var(--muted); font-size: 15px; }
+  .edu .mono { font-size: 13px; color: var(--accent); }
+
+  /* contact */
+  .contact {
+    margin: 88px 0 0; border-radius: 20px; padding: 48px 40px; text-align: center;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, var(--card)), var(--card));
+    border: 1px solid var(--border);
+  }
+  @media (max-width: 560px) { .contact { padding: 36px 20px; } }
+  .contact h2 { font-size: clamp(28px, 4.4vw, 40px); }
+  .contact p { color: var(--muted); max-width: 560px; margin: 12px auto 24px; font-size: 17px; }
+  .contact .cta { justify-content: center; }
+  footer { color: var(--muted); font-size: 14px; text-align: center; padding: 40px 0 48px; }
+
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .caret, .wave-bars i, .v-liza img { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-gh" viewBox="0 0 24 24"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 6h18v12H3zM3 7l9 6 9-6"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8zM14 3v5h5M9 13h6M9 17h6"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z"/></symbol>
+  <symbol id="i-chip" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></g></symbol>
+  <symbol id="i-brain" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 6 1V5a2 2 0 0 0-3-1ZM15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-2 5 3 3 0 0 1-6 1"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="brand-mark">DS</span>Dhruv Singh</a>
+    <div class="links">
+      <a href="#about" class="hide-sm">About</a>
+      <a href="#experience" class="hide-sm">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills" class="hide-sm">Skills</a>
+      <a href="#contact">Contact</a>
+      <button class="icon-btn" id="theme" aria-label="Switch colour theme"><svg><use href="#i-moon"/></svg></button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <span class="status"><i></i>AI / IoT Developer at Tekurious</span>
+      <h1>Hi, I'm Dhruv.<br>I build AI that <span>talks, sees and teaches.</span></h1>
+      <p class="role">I make <b>voice robots</b>, <b>AI tutors</b> and <b>exam platforms</b> — LLMs, RAG and computer vision running on Raspberry Pi and ESP32, plus the cloud backends behind them.</p>
+      <div class="cta">
+        <a class="btn primary" href="#projects">See my work <svg><use href="#i-arrow"/></svg></a>
+        <a class="btn" href="https://github.com/Dhruvd910" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>GitHub</a>
+        <a class="btn" href="mailto:dhruvd910@gmail.com"><svg><use href="#i-mail"/></svg>Email me</a>
+      </div>
+    </div>
+    <div class="term" aria-label="Example conversation with Liza, my AI tutor robot">
+      <div class="term-bar"><i></i><i></i><i></i><span class="mono">liza@raspberrypi5 ~</span></div>
+      <pre class="mono" id="term"></pre>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="stats reveal">
+    <div class="stat"><b>1.5+ yrs</b><span>building AI &amp; IoT systems</span></div>
+    <div class="stat"><b>14</b><span>public repositories</span></div>
+    <div class="stat"><b>4</b><span>AI platforms live on the web</span></div>
+    <div class="stat"><b>19</b><span>languages taught by BhashaBuddy</span></div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- ABOUT -->
+  <section id="about" class="reveal">
+    <div class="sec-head"><div><div class="eyebrow">01 / about</div><h2>Hardware, AI and the data in between</h2></div></div>
+    <div class="about">
+      <div>
+        <p>I'm an <b>AI / IoT developer and data analyst</b> from Ghaziabad, India. Right now I'm building a smart interactive robot from scratch at <b>Tekurious</b> — sensors and servos on one side, computer vision, LLMs and speech on the other.</p>
+        <p>Before that I spent over a year at <b>AKGEC Skills Foundation</b> building IoT data pipelines and live Grafana / Tableau dashboards on InfluxDB, MySQL, MQTT and AWS.</p>
+        <p>My favourite problems are where an AI has to work on a small device, in a real classroom, in Hindi, English or Hinglish — and stay safe: in my robots <b>the LLM never drives hardware directly</b>; it calls a small set of checked tools.</p>
+      </div>
+      <div class="focus">
+        <div><svg><use href="#i-chip"/></svg><div><h3>Embedded AI</h3><p>Raspberry Pi 5, ESP32, touch screens, cameras, mics and GPIO</p></div></div>
+        <div><svg><use href="#i-brain"/></svg><div><h3>LLMs, RAG &amp; voice</h3><p>LangChain, tool calling, Whisper STT, Piper / Cartesia TTS, Ollama</p></div></div>
+        <div><svg><use href="#i-chart"/></svg><div><h3>Data &amp; pipelines</h3><p>Kafka, MQTT, InfluxDB, SQL, FastAPI, Docker, Grafana, Tableau</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="reveal">
+    <div class="sec-head"><div><div class="eyebrow">02 / experience</div><h2>Where I've worked</h2></div></div>
+    <div class="timeline">
+      <div class="job">
+        <div class="job-card">
+          <div class="job-top">
+            <div><h3>AI / IoT Developer</h3><div class="org">Tekurious Pvt. Ltd.</div></div>
+            <div class="when">Jun 2026 — Present</div>
+          </div>
+          <ul>
+            <li>Designing and building a smart interactive robot from scratch: sensors, actuators and servo motors driven by a full Python AI stack on Raspberry Pi.</li>
+            <li>Real-time computer vision with OpenCV and YOLO for object detection, face recognition and spatial awareness.</li>
+            <li>Conversational AI with Gemini / OpenAI APIs and LangChain that understands intent and gives context-aware replies.</li>
+            <li>Speech-to-text and text-to-speech modules for natural voice interaction.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="job past">
+        <div class="job-card">
+          <div class="job-top">
+            <div><h3>Project Engineer</h3><div class="org">AKGEC Skills Foundation · Ghaziabad</div></div>
+            <div class="when">Feb 2025 — May 2026</div>
+          </div>
+          <ul>
+            <li>Built end-to-end Python + SQL pipelines that ingest and analyse IoT sensor data for real-time monitoring.</li>
+            <li>Grafana and Tableau dashboards on InfluxDB and MySQL with live KPIs, cutting manual reporting across teams.</li>
+            <li>Automated device-data workflows and real-time alerting with AWS, MQTT and REST APIs.</li>
+            <li>Containerised analytics services with Docker for consistent, scalable deployment.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="reveal">
+    <div class="sec-head">
+      <div><div class="eyebrow">03 / projects</div><h2>Things I've built</h2></div>
+      <div class="filters" role="group" aria-label="Filter projects">
+        <button aria-pressed="true" data-f="all">All</button>
+        <button aria-pressed="false" data-f="robot">Robots &amp; voice AI</button>
+        <button aria-pressed="false" data-f="web">EdTech platforms</button>
+        <button aria-pressed="false" data-f="ml">ML &amp; data</button>
+      </div>
+    </div>
+
+    <div class="grid" id="grid">
+
+      <article class="proj wide" data-c="robot">
+        <div class="visual v-liza"><span class="tag">Flagship · Raspberry Pi 5</span><img src="assets/liza-face.png" alt="Liza's animated face on her touch screen"></div>
+        <div class="body">
+          <h3>Liza — AI Voice Tutor Robot</h3>
+          <div class="sub">Local-first, multimodal tutor on a 5-inch touchscreen</div>
+          <p>A voice tutor for children with animated faces (idle, listening, thinking, speaking), a push-button wake-up and a "dual brain" that switches between local Ollama, Groq and a cloud backend.</p>
+          <ul>
+            <li><b>Tutor, Co-tell and Re-tell</b> modes — in Re-tell she listens to the child explain, then scores it out of 10 with strong points, gaps and what to revise.</li>
+            <li>RAG over the child's own CBSE / ICSE textbooks, web-search fallback and a fact-check model to filter hallucinations.</li>
+            <li>Camera vision: hold up an object or a book page and she names it, reads it or checks the answer.</li>
+            <li>Includes a <b>3D education engine</b>: 43 validated tools, 29 physics simulations, real anatomy and PubChem molecules in PyVista.</li>
+          </ul>
+          <div class="chips"><span>Python</span><span>RAG</span><span>Ollama</span><span>Groq</span><span>Faster-Whisper</span><span>Object detection</span><span>Pygame</span><span>PySide6</span></div>
+          <div class="proj-links">
+            <a href="https://3-108-162-179.sslip.io/" target="_blank" rel="noopener"><svg><use href="#i-ext"/></svg>Try Liza</a>
+            <a href="https://github.com/Dhruvd910/AI-Voice-Assistance-Raspberry-pi-" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Code</a>
+            <a href="https://github.com/Dhruvd910/AI-Voice-Assistance-Local-" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Offline version</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="proj wide" data-c="web">
+        <div class="visual v-board"><span class="tag">Live · AWS</span><img src="assets/smartboard.jpg" alt="Screenshot of the AI Smart Board with handwriting and the Ask Liza panel" loading="lazy"></div>
+        <div class="body">
+          <h3>AI Smart Board</h3>
+          <div class="sub">A whiteboard that reads your handwriting and explains it</div>
+          <p>A touch whiteboard for phones, tablets and classroom smartboards. Write "2x + 3 = 7" and about a second later it reads it, solves it step by step and offers to plot it, show it in 3D or run a simulation.</p>
+          <ul>
+            <li><b>Check my work</b> marks each line ✓/✗ with a hint — never the answer.</li>
+            <li>Mind maps, flowcharts, question papers with answer keys, in English and 11 Indian languages.</li>
+            <li>Classroom mode: teachers see every student's board live and push questions to all of them.</li>
+          </ul>
+          <div class="chips"><span>Python</span><span>Handwriting OCR</span><span>LLMs</span><span>Docker</span><span>Caddy</span><span>AWS EC2</span></div>
+          <div class="proj-links">
+            <a href="https://13-232-170-34.sslip.io/" target="_blank" rel="noopener"><svg><use href="#i-ext"/></svg>Open the board</a>
+            <a href="https://github.com/Dhruvd910/AI-smart-board" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Code</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="proj" data-c="robot web">
+        <div class="visual v-maya"><span class="tag">Raspberry Pi kiosk</span><span class="glyph">🧭</span><div class="wave-bars"><i style="animation-delay:0s"></i><i style="animation-delay:.1s"></i><i style="animation-delay:.2s"></i><i style="animation-delay:.3s"></i><i style="animation-delay:.4s"></i><i style="animation-delay:.3s"></i><i style="animation-delay:.2s"></i><i style="animation-delay:.1s"></i></div></div>
+        <div class="body">
+          <h3>MAYA — AI Career Guide</h3>
+          <div class="sub">Voice-first career mentor for Class 6 to college</div>
+          <p>An animated assistant that counsels Indian students on careers, JEE / NEET and colleges, in English or Hinglish, and remembers each student over time.</p>
+          <ul>
+            <li>Career knowledge graph: skills, degrees, exams and colleges, so "PCB lu toh kya options?" gets a real answer.</li>
+            <li>Real JoSAA / MCC cutoffs, assessments, roadmaps and pgvector memory with consent.</li>
+          </ul>
+          <div class="chips"><span>FastAPI</span><span>PostgreSQL + pgvector</span><span>PySide6</span><span>Whisper</span><span>Cartesia</span><span>Next.js</span></div>
+          <div class="proj-links"><a href="https://github.com/Dhruvd910/Career-Guidance" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Code</a></div>
+        </div>
+      </article>
+
+      <article class="proj" data-c="robot">
+        <div class="visual v-buddy"><span class="tag">19 languages</span><img src="assets/bhashabuddy.png" alt="BhashaBuddy app icon" loading="lazy"></div>
+        <div class="body">
+          <h3>BhashaBuddy AI</h3>
+          <div class="sub">Voice language tutor on a Pi touchscreen</div>
+          <p>Buddy explains in Hindi or English, speaks the new language with a native voice, listens and corrects — 8 Indian and 9 foreign languages.</p>
+          <ul>
+            <li>Word-by-word drills judged on-device, spaced review and per-language streaks.</li>
+            <li>Streaming pipeline: mic → Groq Whisper → LLM teacher (JSON) → Cartesia TTS.</li>
+          </ul>
+          <div class="chips"><span>Python</span><span>Tkinter</span><span>Groq Whisper</span><span>OpenRouter</span><span>Cartesia</span><span>SQLite</span></div>
+          <div class="proj-links"><a href="https://github.com/Dhruvd910/BhashaBuddy" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Code</a></div>
+        </div>
+      </article>
+
+      <article class="proj" data-c="web">
+        <div class="visual v-neet"><span class="tag">Live</span><span class="glyph">🩺</span></div>
+        <div class="body">
+          <h3>NEET Compass</h3>
+          <div class="sub">NEET-UG practice, prediction and college intelligence</div>
+          <p>Timed NEET-format tests on an OMR-style sheet, week-by-week study plans and a college finder with fees, hostels and what's around campus on a map.</p>
+          <ul>
+            <li>Predictions from a transparent historical-cutoff matcher — not an LLM.</li>
+            <li>Every fact carries its source and verification date; AI assistant only explains data it fetched.</li>
+          </ul>
+          <div class="chips"><span>FastAPI</span><span>HTMX</span><span>SQLAlchemy</span><span>BM25 + embeddings</span><span>Tesseract</span><span>Playwright</span></div>
+          <div class="proj-links">
+            <a href="https://dhruvd910.github.io/NEET/" target="_blank" rel="noopener"><svg><use href="#i-ext"/></svg>Live site</a>
+            <a href="https://github.com/Dhruvd910/NEET" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Code</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="proj" data-c="web">
+        <div class="visual v-jee"><span class="tag">Live</span><span class="glyph">⚡</span></div>
+        <div class="body">
+          <h3>JEE Workbench</h3>
+          <div class="sub">Practice and counselling for JEE Main + Advanced</div>
+          <p>Real NTA and IIT papers with official keys, mocks that never repeat a question, a rank → college predictor and a JoSAA choice-list builder.</p>
+          <ul>
+            <li>Loaded 33,570 JoSAA cutoff rows across 130 institutes, plus NIRF rankings.</li>
+            <li>AI-checked question variants so every mock is fresh.</li>
+          </ul>
+          <div class="chips"><span>FastAPI</span><span>Jinja2</span><span>HTMX</span><span>Alembic</span><span>Tailwind</span><span>pytest</span></div>
+          <div class="proj-links">
+            <a href="https://dhruvd910.github.io/JEE/" target="_blank" rel="noopener"><svg><use href="#i-ext"/></svg>Live site</a>
+            <a href="https://github.com/Dhruvd910/JEE" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Code</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="proj" data-c="robot">
+        <div class="visual v-hanuman"><span class="tag">ESP32 + local LLM</span><span class="glyph">🪔</span><div class="wave-bars"><i style="animation-delay:.2s"></i><i style="animation-delay:.05s"></i><i style="animation-delay:.3s"></i><i style="animation-delay:.15s"></i><i style="animation-delay:.4s"></i><i style="animation-delay:.1s"></i></div></div>
+        <div class="body">
+          <h3>Hanuman Bot</h3>
+          <div class="sub">AI-powered spiritual companion device</div>
+          <p>An ESP32 device (mic, OLED, speaker, buttons) talking over WebSocket to a Python AI server for real-time voice Q&amp;A grounded in a curated Ramayana knowledge base.</p>
+          <ul>
+            <li>Faster-Whisper STT in Hindi / English / Hinglish, FAISS / Chroma RAG, Ollama and Piper TTS.</li>
+            <li>Whitelisted command layer — the server moved from laptop to Pi / VPS with zero firmware changes.</li>
+          </ul>
+          <div class="chips"><span>ESP32</span><span>WebSocket</span><span>Faster-Whisper</span><span>FAISS</span><span>Ollama</span><span>Piper</span></div>
+        </div>
+      </article>
+
+      <article class="proj" data-c="ml">
+        <div class="visual v-saathi"><span class="tag">Deep learning</span><span class="glyph">🌱</span></div>
+        <div class="body">
+          <h3>Saathi — Plant Disease &amp; Crop Advisor</h3>
+          <div class="sub">CNN disease detection + crop recommendation</div>
+          <p>Detects 33 plant disease classes from leaf photos and recommends crops from soil and weather data, served through a Flask web app.</p>
+          <ul>
+            <li>EfficientNetV2 reached <b>95.8%</b> validation accuracy (vs ResNet50 95.5%, VGG16 91.8%).</li>
+            <li>Random Forest crop recommender at <b>99.3%</b> accuracy, compared against 4 other models.</li>
+          </ul>
+          <div class="chips"><span>TensorFlow</span><span>Keras</span><span>Scikit-learn</span><span>Flask</span></div>
+          <div class="proj-links"><a href="https://github.com/Dhruvd910/Plant-disease-and-Crop-recommendation-" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Code</a></div>
+        </div>
+      </article>
+
+      <article class="proj" data-c="ml">
+        <div class="visual v-tweet"><span class="tag">Streaming NLP</span><span class="glyph">📡</span></div>
+        <div class="body">
+          <h3>Real-Time Twitter Sentiment Pipeline</h3>
+          <div class="sub">CDAC capstone · Kafka + NLP + Streamlit</div>
+          <p>Tweets stream through Apache Kafka, get cleaned and classified Positive / Negative / Neutral, and land on a live Streamlit dashboard.</p>
+          <ul>
+            <li>Sub-2-second end-to-end latency; 78% classification accuracy with NLTK and TextBlob.</li>
+            <li>Live sentiment trends and word-frequency charts.</li>
+          </ul>
+          <div class="chips"><span>Apache Kafka</span><span>NLTK</span><span>TextBlob</span><span>Pandas</span><span>Streamlit</span></div>
+          <div class="proj-links">
+            <a href="https://github.com/Dhruvd910/Sentiment-analysis-on-Twitter-data-kar-de" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Code</a>
+            <a href="https://github.com/shivanshyadav1704/Sentiment-Analysis" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Team repo</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- MORE -->
+  <section class="reveal">
+    <div class="sec-head"><div><div class="eyebrow">04 / more on github</div><h2>Smaller work &amp; learning</h2></div></div>
+    <div class="mini-grid">
+      <a class="mini" href="https://dhruvd910.github.io/portal/" target="_blank" rel="noopener"><h3>Tekurious Aspirant Hub<svg><use href="#i-ext"/></svg></h3><p>One doorway to NEET Compass, JEE Workbench, the Smart Board and Liza — a swipeable card carousel.</p></a>
+      <a class="mini" href="https://github.com/Dhruvd910/IoT-with-Micropython" target="_blank" rel="noopener"><h3>IoT with MicroPython<svg><use href="#i-gh"/></svg></h3><p>A 7-day course I wrote: ESP32 + Raspberry Pi, Wi-Fi sockets, MQTT pub/sub and JSON sensor data.</p></a>
+      <a class="mini" href="https://github.com/Dhruvd910/Analysis-" target="_blank" rel="noopener"><h3>Data analysis notebooks<svg><use href="#i-gh"/></svg></h3><p>EDA on Amazon sales, hotel bookings and YouTube data with Pandas, Matplotlib and Seaborn.</p></a>
+      <a class="mini" href="https://github.com/Dhruvd910/regression" target="_blank" rel="noopener"><h3>Regression models<svg><use href="#i-gh"/></svg></h3><p>Simple and multiple linear regression on English Premier League soccer data.</p></a>
+      <a class="mini" href="https://github.com/Dhruvd910/placement-prepration-" target="_blank" rel="noopener"><h3>Placement prep (DSA)<svg><use href="#i-gh"/></svg></h3><p>Python solutions: 3Sum, max subarray, path sum, majority element and more.</p></a>
+      <a class="mini" href="https://github.com/Dhruvd910" target="_blank" rel="noopener"><h3>All repositories<svg><use href="#i-arrow"/></svg></h3><p>Everything else, on github.com/Dhruvd910.</p></a>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="reveal">
+    <div class="sec-head"><div><div class="eyebrow">05 / skills</div><h2>What I work with</h2></div></div>
+    <div class="skills">
+      <div class="skill"><h3><i>✦</i>Generative AI &amp; LLMs</h3><div class="chips"><span>LangChain</span><span>RAG</span><span>Tool calling</span><span>Prompt engineering</span><span>Hugging Face</span><span>Ollama</span><span>OpenAI / Gemini / Groq</span></div></div>
+      <div class="skill"><h3><i>◎</i>Computer vision</h3><div class="chips"><span>OpenCV</span><span>YOLO</span><span>Face detection</span><span>Image processing</span><span>CNNs</span></div></div>
+      <div class="skill"><h3><i>❝</i>NLP &amp; speech</h3><div class="chips"><span>NLTK</span><span>TextBlob</span><span>Sentiment analysis</span><span>Whisper STT</span><span>Piper / Cartesia TTS</span></div></div>
+      <div class="skill"><h3><i>∑</i>Machine learning</h3><div class="chips"><span>Scikit-learn</span><span>XGBoost</span><span>PyTorch</span><span>TensorFlow / Keras</span></div></div>
+      <div class="skill"><h3><i>⌁</i>IoT &amp; embedded</h3><div class="chips"><span>Raspberry Pi</span><span>ESP32</span><span>MicroPython</span><span>MQTT</span><span>WebSocket</span><span>GPIO / SPI</span></div></div>
+      <div class="skill"><h3><i>▤</i>Data &amp; analytics</h3><div class="chips"><span>Python</span><span>SQL</span><span>Pandas</span><span>NumPy</span><span>Tableau</span><span>Grafana</span><span>Streamlit</span></div></div>
+      <div class="skill"><h3><i>⚙</i>Backend &amp; MLOps</h3><div class="chips"><span>FastAPI</span><span>REST APIs</span><span>Docker</span><span>AWS</span><span>Alembic</span><span>pytest</span></div></div>
+      <div class="skill"><h3><i>⛁</i>Databases &amp; streaming</h3><div class="chips"><span>PostgreSQL</span><span>pgvector</span><span>MySQL</span><span>InfluxDB</span><span>Apache Kafka</span><span>FAISS / Chroma</span></div></div>
+      <div class="skill"><h3><i>▣</i>Interfaces</h3><div class="chips"><span>PySide6 / Qt</span><span>Tkinter</span><span>Pygame</span><span>HTMX</span><span>Tailwind</span></div></div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="reveal">
+    <div class="sec-head"><div><div class="eyebrow">06 / education</div><h2>Education</h2></div></div>
+    <div class="edu">
+      <div><span class="mono">2023 — 2024</span><h3>PG Diploma in Data Analytics</h3><p>CDAC · Hyderabad</p></div>
+      <div><span class="mono">2019 — 2023</span><h3>B.Tech in Information Technology</h3><p>KIET Group of Institutions · Ghaziabad</p></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact reveal">
+    <div class="eyebrow">07 / contact</div>
+    <h2>Let's build something smart</h2>
+    <p>I'm looking to grow in AI/ML engineering and applied AI roles. If you're building robots, voice agents or AI for education, I'd love to talk.</p>
+    <div class="cta">
+      <a class="btn primary" href="mailto:dhruvd910@gmail.com"><svg><use href="#i-mail"/></svg>dhruvd910@gmail.com</a>
+      <a class="btn" href="https://github.com/Dhruvd910" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>GitHub</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>© <span id="yr">2026</span> Dhruv Singh · Built with plain HTML &amp; CSS</footer>
+
+<script>
+  // theme toggle
+  (function () {
+    var root = document.documentElement, btn = document.getElementById('theme');
+    var stored = null;
+    try { stored = localStorage.getItem('theme'); } catch (e) {}
+    if (stored) root.setAttribute('data-theme', stored);
+    function isDark() {
+      var t = root.getAttribute('data-theme');
+      return t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    function paint() { btn.querySelector('use').setAttribute('href', isDark() ? '#i-sun' : '#i-moon'); }
+    btn.addEventListener('click', function () {
+      var next = isDark() ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      paint();
+    });
+    paint();
+  })();
+
+  // project filters
+  document.querySelectorAll('.filters button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.filters button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+      var f = b.dataset.f;
+      document.querySelectorAll('#grid .proj').forEach(function (p) {
+        p.classList.toggle('hidden', f !== 'all' && p.dataset.c.split(' ').indexOf(f) < 0);
+      });
+    });
+  });
+
+  // reveal on scroll
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .08 }) : null;
+  document.querySelectorAll('.reveal').forEach(function (el) { io ? io.observe(el) : el.classList.add('in'); });
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // typing terminal
+  (function () {
+    var lines = [
+      ['<span class="t-c"># push the button, ask a question</span>', 0],
+      ['<span class="t-p">you  ›</span> why is the sky blue?', 1],
+      ['<span class="t-k">liza ›</span> [thinking] retrieving: physics/light_scattering', 1],
+      ['<span class="t-k">liza ›</span> Sunlight bumps into tiny air molecules.', 1],
+      ['       Blue light scatters the most, so the', 1],
+      ['       whole sky glows blue! <span class="t-s">🔵 show diagram?</span>', 1],
+      ['<span class="t-p">you  ›</span> yes, and quiz me after', 1],
+      ['<span class="t-k">liza ›</span> mode → <span class="t-s">Re-tell</span>. Your turn to explain!', 1]
+    ];
+    var el = document.getElementById('term');
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { el.innerHTML = lines.map(function (l) { return l[0]; }).join('\n') + ' <span class="caret"></span>'; return; }
+    var i = 0, html = '';
+    function next() {
+      if (i >= lines.length) { el.innerHTML = html + ' <span class="caret"></span>'; return; }
+      html += (i ? '\n' : '') + lines[i][0];
+      el.innerHTML = html + ' <span class="caret"></span>';
+      i++;
+      setTimeout(next, i === 1 ? 500 : 750);
+    }
+    setTimeout(next, 400);
+  })();
+</script>
+</body>
+</html>
